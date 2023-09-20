@@ -95,6 +95,7 @@ public class SplashScreen extends AppCompatActivity {
     public static String userLoggedIAs = "not set";
     public static String authProviderName = "";
     public static String userEmail = "";
+    FirebaseUser firebaseUser;
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -319,9 +320,8 @@ public class SplashScreen extends AppCompatActivity {
             createSnackBar();
             return;
         }
-        Log.d(TAG, "userLoggedIn: " + userLoggedIn);
-        Log.d(TAG, "userLoggedIAs: " + userLoggedIAs);
-        if (SplashScreen.userLoggedIn) {
+
+        if (SplashScreen.userLoggedIn && firebaseUser != null) {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
         } else {
@@ -458,18 +458,11 @@ public class SplashScreen extends AppCompatActivity {
 
     protected void onStart() {
         super.onStart();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            authProviderName = user.getProviderData().get(user.getProviderData().size() - 1).getProviderId();
-            Log.d(TAG, "AuthProvider: " + authProviderName);
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null) {
+            authProviderName = firebaseUser.getProviderData().get(firebaseUser.getProviderData().size() - 1).getProviderId();
             userLoggedIn = true;
-
         }
-
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-        Log.d(TAG, "FirebaseUser: " + user);
-        Log.d(TAG, "GoogleSignInAccount: " + acct);
-
     }
 
 
