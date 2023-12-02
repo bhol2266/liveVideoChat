@@ -76,7 +76,7 @@ public class VipMembership extends AppCompatActivity {
     AlertDialog dialog;
     private BillingClient billingClient;
     LinearLayout progressBar;
-    TextView buyNowTimer, offerTimer,offerTextview;
+    TextView buyNowTimer, offerTimer, offerTextview;
 
     private BroadcastReceiver timerUpdateReceiver, timerUpdateReceiverCheck;
     private boolean isTimerRunning = false;
@@ -126,7 +126,7 @@ public class VipMembership extends AppCompatActivity {
                             progressBar.setVisibility(View.GONE);
 
                             cancelScheduledAlarm();
-                            startActivity(new Intent(VipMembership.this, SplashScreen.class));
+                            startActivity(new Intent(VipMembership.this, MyApplication.class));
 
                         }
                     }, 5000);
@@ -372,10 +372,7 @@ public class VipMembership extends AppCompatActivity {
         }
         gridItemList.add(item_modelClass6);
 
-        boolean discountApplied = false;
-        if (offer.equals("with offer")) {
-            discountApplied = true;
-        }
+        boolean discountApplied = offer.equals("with offer");
 
         adapter = new GridAdapter(this, gridItemList, discountApplied);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
@@ -440,7 +437,7 @@ public class VipMembership extends AppCompatActivity {
             @Override
             public void onConsumeResponse(@NonNull BillingResult billingResult, @NonNull String s) {
                 if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
-                    Log.d(SplashScreen.TAG, "Consumed: ");
+                    Log.d(MyApplication.TAG, "Consumed: ");
                 }
             }
         });
@@ -492,7 +489,7 @@ public class VipMembership extends AppCompatActivity {
                 // Error occurred while retrieving the document
                 FirebaseFirestoreException exception = (FirebaseFirestoreException) task.getException();
                 // Handle the exception
-                Log.d(SplashScreen.TAG, "FirebaseFirestoreException: " + exception.getMessage());
+                Log.d(MyApplication.TAG, "FirebaseFirestoreException: " + exception.getMessage());
             }
         });
 
@@ -702,7 +699,7 @@ public class VipMembership extends AppCompatActivity {
         }
 
         if (!isTimerRunning) {
-            buyNowTimer.setText("BUY NOW " + timeLeftFormatted.toString());
+            buyNowTimer.setText("BUY NOW " + timeLeftFormatted);
         }
         offerTimer.setText("Offer ends in " + timeLeftFormatted);
         offerTimer.setVisibility(View.VISIBLE);
@@ -756,7 +753,7 @@ public class VipMembership extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Log.d(SplashScreen.TAG, "backpressCount: " + backpressCount);
+        Log.d(MyApplication.TAG, "backpressCount: " + backpressCount);
         if (backpressCount == 0) {
             exit_dialog();
             backpressCount++;
@@ -816,8 +813,8 @@ public class VipMembership extends AppCompatActivity {
 
 class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder> {
 
-    private List<GridItem_ModelClass> gridItemList;
-    private Context context;
+    private final List<GridItem_ModelClass> gridItemList;
+    private final Context context;
     boolean discountApplied;
 
     private int selectedItemPosition = VipMembership.selectedCard[0];

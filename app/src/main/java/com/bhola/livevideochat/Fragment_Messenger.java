@@ -34,7 +34,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
-import org.checkerframework.checker.units.qual.A;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -61,6 +60,7 @@ public class Fragment_Messenger extends Fragment {
     LinearLayoutManager layoutManager;
     public static MessengeItemsAdapter adapter;
     public static String currentActiveUser = "";
+    public static int count = 0;
 
     private Dialog alertNotificationDialog;
     private static final long AUTO_DISMISS_DELAY = 4000; // 4 seconds
@@ -127,7 +127,7 @@ public class Fragment_Messenger extends Fragment {
     private void readDataFromJson() {
 
         userList = new ArrayList<>();
-        if (SplashScreen.userLoggedIn && SplashScreen.userLoggedIAs.equals("Google") && SplashScreen.App_updating.equals("inactive")) {
+        if (MyApplication.userLoggedIn && MyApplication.userLoggedIAs.equals("Google") && MyApplication.App_updating.equals("inactive")) {
             DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("BotChats/users");
             usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -215,7 +215,7 @@ public class Fragment_Messenger extends Fragment {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Log.d(SplashScreen.TAG, " userList.size(): " + databaseError.getMessage());
+                    Log.d(MyApplication.TAG, " userList.size(): " + databaseError.getMessage());
                 }
             });
         } else {
@@ -271,7 +271,7 @@ public class Fragment_Messenger extends Fragment {
                         int read = userBotMsgObject.getInt("read");
                         int sent = userBotMsgObject.getInt("sent");
 
-                        UserBotMsg userBotMsg = new UserBotMsg(msgId, msg, mimeType, extraMessage, dateTime, nextMsgDelay, read, sent);
+                        UserBotMsg userBotMsg = new UserBotMsg(msgId, msg, mimeType, extraMessage, dateTime, nextMsgDelay, read, sent, "free", 2);
                         userBotMsgList.add(userBotMsg);
                     }
 
@@ -312,7 +312,7 @@ public class Fragment_Messenger extends Fragment {
                             int read2 = replyToUseObject.getInt("read");
                             int sent2 = replyToUseObject.getInt("sent");
 
-                            UserBotMsg userBotMsg = new UserBotMsg(msgId, msg, mimeType, extraMessage, dateTime2, nextMsgDelay, read2, sent2);
+                            UserBotMsg userBotMsg = new UserBotMsg(msgId, msg, mimeType, extraMessage, dateTime2, nextMsgDelay, read2, sent2, "free", 2);
                             replyToUserList.add(userBotMsg);
                         }
 
@@ -425,7 +425,7 @@ public class Fragment_Messenger extends Fragment {
         String json = gson.toJson(userList);
 
 // Save the JSON string to SharedPreferences
-        if (SplashScreen.userLoggedIn && SplashScreen.userLoggedIAs.equals("Google")) {
+        if (MyApplication.userLoggedIn && MyApplication.userLoggedIAs.equals("Google")) {
             editor.putString("userListTemp_Google", json);
         } else {
             editor.putString("userListTemp_Guest", json);
@@ -439,7 +439,7 @@ public class Fragment_Messenger extends Fragment {
 
 // Retrieve the JSON string from SharedPreferences
         String json = "";
-        if (SplashScreen.userLoggedIn && SplashScreen.userLoggedIAs.equals("Google")) {
+        if (MyApplication.userLoggedIn && MyApplication.userLoggedIAs.equals("Google")) {
             json = sharedPreferences.getString("userListTemp_Google", null);
         } else {
             json = sharedPreferences.getString("userListTemp_Guest", null);

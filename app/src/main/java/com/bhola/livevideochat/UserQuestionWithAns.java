@@ -1,4 +1,5 @@
 package com.bhola.livevideochat;
+
 import java.util.ArrayList;
 
 public class UserQuestionWithAns {
@@ -6,7 +7,7 @@ public class UserQuestionWithAns {
     private ArrayList<String> answers;
     private String action;
     private String dateTime;
-    private int read,sent;
+    private int read, sent;
     private String reply;
     private ArrayList<UserBotMsg> replyToUser;
 

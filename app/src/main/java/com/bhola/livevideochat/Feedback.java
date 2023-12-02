@@ -1,9 +1,5 @@
 package com.bhola.livevideochat;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,9 +8,6 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.TextUtils;
-import android.util.Log;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,6 +17,10 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
@@ -64,7 +61,7 @@ public class Feedback extends AppCompatActivity {
     }
 
     private void actionBar() {
-        ImageView back_arrow=findViewById(R.id.back_arrow);
+        ImageView back_arrow = findViewById(R.id.back_arrow);
         back_arrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,11 +75,11 @@ public class Feedback extends AppCompatActivity {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(problem.getText().equals("The Problem is related with")){
+                if (problem.getText().equals("The Problem is related with")) {
                     problemOption.performClick();
                     return;
                 }
-                if (email.getText().toString().length() ==0) {
+                if (email.getText().toString().length() == 0) {
                     Toast.makeText(Feedback.this, "Enter email", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -91,7 +88,7 @@ public class Feedback extends AppCompatActivity {
                     return;
 
                 }
-                if (description.getText().toString().length() ==0) {
+                if (description.getText().toString().length() == 0) {
                     Toast.makeText(Feedback.this, "Enter description", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -102,7 +99,7 @@ public class Feedback extends AppCompatActivity {
         });
     }
 
-    private boolean isValidEmail(String email){
+    private boolean isValidEmail(String email) {
 
 
         return Pattern.compile("^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"

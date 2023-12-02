@@ -1,18 +1,28 @@
 package com.bhola.livevideochat;
 
-import android.animation.Animator;
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.InsetDrawable;
 import android.os.Bundle;
-import android.Manifest;
+import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultCaller;
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -21,26 +31,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.airbnb.lottie.LottieAnimationView;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -62,15 +55,9 @@ public class Fragment_HomePage extends Fragment {
     Context context;
     AlertDialog permissionDialog;
 
-
+    private boolean isCameraPermissionGranted = false;
+    private boolean isRecordAudioPermissionGranted = false;
     ActivityResultLauncher<String[]> mPermissionResultLauncher;
-    private boolean isCameraPermissionGranted;
-    private boolean isMicrophonePermissionGranted;
-    private String[] PERMISSIONS;
-
-
-    private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
-    private static final int MICROPHONE_PERMISSION_REQUEST_CODE = 101;
 
 
     public Fragment_HomePage() {
@@ -92,11 +79,23 @@ public class Fragment_HomePage extends Fragment {
         blinkWorldMap(view, context);
         update_onlineCount(view, context);
 
-        PERMISSIONS = new String[]{
+        mPermissionResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
+            @Override
+            public void onActivityResult(Map<String, Boolean> result) {
+                if (result.get(Manifest.permission.CAMERA) != null) {
+                    isCameraPermissionGranted = result.get(Manifest.permission.CAMERA);
+                }
+                if (result.get(Manifest.permission.RECORD_AUDIO) != null) {
+                    isRecordAudioPermissionGranted = result.get(Manifest.permission.RECORD_AUDIO);
+                }
+                if (result.get(Manifest.permission.CAMERA) != null && result.get(Manifest.permission.RECORD_AUDIO) != null && isCameraPermissionGranted && isRecordAudioPermissionGranted) {
+                    Intent intent = new Intent(context, BeforeVideoCall.class);
+                    intent.putExtra("count", onlineCountTextview.getText().toString());
+                    startActivity(intent);
+                }
+            }
+        });
 
-                Manifest.permission.CAMERA,
-                Manifest.permission.RECORD_AUDIO,
-        };
 
         return view;
     }
@@ -121,7 +120,7 @@ public class Fragment_HomePage extends Fragment {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                int range[] = {5, 10, 15, 20, 25};
+                int[] range = {5, 10, 15, 20, 25};
                 int randomIndex = new Random().nextInt(range.length);
                 int randomElement = range[randomIndex];
                 int min1 = randomNumber - randomElement;
@@ -192,16 +191,8 @@ public class Fragment_HomePage extends Fragment {
             public void onClick(View view) {
 
 
-                if (!hasPermissions(context, PERMISSIONS)) {
+                requestPermission(); // this method will check permissions and if permission are granted it will take to BeforeCameraActivity
 
-                    checkPermissionDialog();
-
-                } else {
-
-                    Intent intent = new Intent(context, BeforeVideoCall.class);
-                    intent.putExtra("count", onlineCountTextview.getText().toString());
-                    startActivity(intent);
-                }
 
             }
         });
@@ -238,46 +229,28 @@ public class Fragment_HomePage extends Fragment {
 
     }
 
-    public void checkPermissionDialog() {
 
+    private void requestPermission() {
 
-        final androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(context);
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View promptView = inflater.inflate(R.layout.dialog_allow_permission, null);
-        builder.setView(promptView);
-        builder.setCancelable(true);
+        isCameraPermissionGranted = ContextCompat.checkSelfPermission((Activity) context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
+        isRecordAudioPermissionGranted = ContextCompat.checkSelfPermission((Activity) context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED;
 
-        LinearLayout notificationLayout = promptView.findViewById(R.id.notificationLayout);
-        LinearLayout locationLayout = promptView.findViewById(R.id.locationLayout);
-        LinearLayout storageLayout = promptView.findViewById(R.id.storageLayout);
+        List<String> permmisionRequestList = new ArrayList<>();
+        if (!isCameraPermissionGranted) {
+            permmisionRequestList.add(Manifest.permission.CAMERA);
+        }
+        if (!isRecordAudioPermissionGranted) {
+            permmisionRequestList.add(Manifest.permission.RECORD_AUDIO);
+        }
 
-        notificationLayout.setVisibility(View.GONE);
-        locationLayout.setVisibility(View.GONE);
-        storageLayout.setVisibility(View.GONE);
-
-        TextView allow = promptView.findViewById(R.id.allow);
-        allow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                permissionDialog.dismiss();
-                ActivityCompat.requestPermissions((Activity) context, PERMISSIONS, 1);
-
-            }
-        });
-
-
-        permissionDialog = builder.create();
-        permissionDialog.show();
-        permissionDialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT); //Controlling width and height.
-
-
-        ColorDrawable back = new ColorDrawable(Color.TRANSPARENT);
-        InsetDrawable inset = new InsetDrawable(back, 20);
-        permissionDialog.getWindow().setBackgroundDrawable(inset);
-        permissionDialog.getWindow().setLayout(750, WindowManager.LayoutParams.WRAP_CONTENT); //Controlling width and height.
-
+        if (!permmisionRequestList.isEmpty()) {
+            mPermissionResultLauncher.launch(permmisionRequestList.toArray(new String[0]));
+        } else {
+            Intent intent = new Intent(context, BeforeVideoCall.class);
+            intent.putExtra("count", onlineCountTextview.getText().toString());
+            startActivity(intent);
+        }
     }
-
 
     private void startAnimation(Context context) {
         // Assuming you have a view object, e.g., myView

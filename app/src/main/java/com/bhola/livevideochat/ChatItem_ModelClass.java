@@ -9,7 +9,7 @@ public class ChatItem_ModelClass {
     private String gender;
     private String age;
     private String country;
-    private  ArrayList<String> contentImages;
+    private ArrayList<String> contentImages;
     private String users;
     private String answerRate;
     private String userProfile;

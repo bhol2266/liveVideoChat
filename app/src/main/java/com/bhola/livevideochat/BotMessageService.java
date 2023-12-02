@@ -1,19 +1,11 @@
 package com.bhola.livevideochat;
 
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 public class BotMessageService extends Service {
 
@@ -38,8 +30,8 @@ public class BotMessageService extends Service {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Log.d(SplashScreen.TAG, "run: "+finalI);
-                    Fragment_Messenger.userListTemp.add(0,   Fragment_Messenger.userList.get(finalI));
+                    Log.d(MyApplication.TAG, "run: " + finalI);
+                    Fragment_Messenger.userListTemp.add(0, Fragment_Messenger.userList.get(finalI));
                     Fragment_Messenger.adapter.notifyItemInserted(0);
 //
 //                    Intent intent = new Intent("timer-update");
@@ -67,6 +59,6 @@ public class BotMessageService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(SplashScreen.TAG, "onDestroy: ");
+        Log.d(MyApplication.TAG, "onDestroy: ");
     }
 }

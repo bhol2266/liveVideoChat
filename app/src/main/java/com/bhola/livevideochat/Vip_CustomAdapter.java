@@ -1,6 +1,5 @@
 package com.bhola.livevideochat;
 
-import android.app.Activity;
 import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,13 +8,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.billingclient.api.BillingClient;
-import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.ProductDetails;
-import com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +65,7 @@ public class Vip_CustomAdapter extends RecyclerView.Adapter<Vip_CustomAdapter.Vi
             coinsCount.setText("3000");
         }
 
-        Log.d(SplashScreen.TAG, "position: " + productDetails.getOneTimePurchaseOfferDetails().getFormattedPrice());
+        Log.d(MyApplication.TAG, "position: " + productDetails.getOneTimePurchaseOfferDetails().getFormattedPrice());
 
         price.setText(productDetails.getOneTimePurchaseOfferDetails().getFormattedPrice().replace(".00", ""));
         if (offer.equals("with offer")) {

@@ -1,6 +1,5 @@
 package com.bhola.livevideochat;
 
-import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -8,14 +7,10 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
-import android.widget.Toast;
 
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 public class NotificationReceiver extends BroadcastReceiver {
 
@@ -24,7 +19,7 @@ public class NotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Log.d("TAGadsafdsa", "showNotification:"+"Im here");
+        Log.d("TAGadsafdsa", "showNotification:" + "Im here");
 
         String userName = intent.getStringExtra("USERNAME");
         this.context = context;
@@ -36,7 +31,6 @@ public class NotificationReceiver extends BroadcastReceiver {
         Intent notificationIntent = new Intent(context, MainActivity.class); // Replace TargetActivity with your desired activity
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
-
 
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, "notify_001");

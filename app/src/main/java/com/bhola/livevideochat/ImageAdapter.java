@@ -1,23 +1,19 @@
 package com.bhola.livevideochat;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageViewHolder> {
-    private Context context;
-    private List<Integer> imageList;
+    private final Context context;
+    private final List<Integer> imageList;
 
     public ImageAdapter(Context context, List<Integer> imageList) {
         this.context = context;
