@@ -166,7 +166,10 @@ public class LoginScreen extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            progressDialog.cancel();
+                            if (progressDialog != null) {
+                                //Crashlytics error
+                                progressDialog.cancel();
+                            }
                             ArrayList<String> keyword = new ArrayList<>();
                             checkUserExist(account.getEmail(), account.getDisplayName(), account.getPhotoUrl().toString());
 

@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
 
         checkForupdate();
         getUserLocation_Permission();
-        Utils.getLocation(MainActivity.this);
 
         if (MyApplication.Ads_State.equals("active")) {
             showAds();

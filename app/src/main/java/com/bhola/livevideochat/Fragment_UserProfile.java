@@ -36,7 +36,7 @@ public class Fragment_UserProfile extends Fragment {
     LinearLayout logout;
     View view;
     Context context;
-
+    public static TextView location;
 
     public Fragment_UserProfile() {
         // Required empty public constructor
@@ -141,15 +141,8 @@ public class Fragment_UserProfile extends Fragment {
             genderCard.setCardBackgroundColor(getResources().getColor(R.color.male_icon)); // Replace with your color resource ID
         }
 
-        TextView location = view.findViewById(R.id.location);
-
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                location.setText(MyApplication.currentCity);
-            }
-        }, 2000);
+        location = view.findViewById(R.id.location);
+        location.setText(MyApplication.userModel.getLocation());
 
 
         if (MyApplication.userLoggedIn) {

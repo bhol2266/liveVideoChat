@@ -15,6 +15,7 @@ import android.net.NetworkInfo;
 import android.net.ParseException;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
@@ -276,7 +277,6 @@ public class Utils {
                 MyApplication.currentCity = addresses.get(0).getLocality();
                 MyApplication.currentCountry = addresses.get(0).getCountryName();
                 // Now you have the city and country information
-
                 updateLocationFireStore();
 
             }

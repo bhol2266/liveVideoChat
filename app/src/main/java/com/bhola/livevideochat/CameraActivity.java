@@ -516,13 +516,13 @@ public class CameraActivity extends AppCompatActivity {
                 // Add the Girl object to the ArrayList
                 if (MyApplication.userLoggedIAs.equals("Google")) {
                     girlsList.add(girl);
-
                 } else {
                     if (girl.isCensored()) {
                         girlsList.add(girl);
                     }
                 }
             }
+            Collections.shuffle(girlsList);
             playVideoinBackground();
 
         } catch (JSONException e) {

@@ -18,10 +18,7 @@ public class AudioRecorder {
 
 
     void start(String filePath) throws IOException {
-        if (mediaRecorder == null) {
-            initMediaRecorder();
-        }
-
+        initMediaRecorder();
         mediaRecorder.setOutputFile(filePath);
         mediaRecorder.prepare();
         mediaRecorder.start();
