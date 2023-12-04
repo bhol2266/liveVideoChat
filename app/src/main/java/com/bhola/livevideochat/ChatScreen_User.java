@@ -809,7 +809,12 @@ public class ChatScreen_User extends Activity {
         myRunnable = new Runnable() {
             @Override
             public void run() {
+                try{
+                    //Crashlytics error
                 checkForUpdate();
+                } catch (Exception e) {
+                }
+
                 // Schedule the task to run again after 1 second
                 handler.postDelayed(this, 500);
             }

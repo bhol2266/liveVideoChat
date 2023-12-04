@@ -142,7 +142,7 @@ public class Fragment_UserProfile extends Fragment {
         }
 
         location = view.findViewById(R.id.location);
-        location.setText(MyApplication.userModel.getLocation());
+        location.setText(MyApplication.currentCity);
 
 
         if (MyApplication.userLoggedIn) {

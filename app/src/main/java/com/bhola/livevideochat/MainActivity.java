@@ -56,8 +56,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        try {
+            //Crashlytics error
+            String userId = String.valueOf(MyApplication.userModel.getUserId());
+        } catch (Exception e) {
+            startActivity(new Intent(MainActivity.this, SplashScreen.class));
+            finish();
+            return;
+        }
         checkForupdate();
         getUserLocation_Permission();
+
 
         if (MyApplication.Ads_State.equals("active")) {
             showAds();
