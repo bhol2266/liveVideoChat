@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,7 +91,7 @@ public class Fragment_Calling extends Fragment {
             public void run() {
                 endcall.performClick();
             }
-        }, 10000);
+        }, 15000);
     }
 
     private void init() {
@@ -123,6 +124,9 @@ public class Fragment_Calling extends Fragment {
 
         VideoView videoView = view.findViewById(R.id.videoView);
         String videoPath = MyApplication.databaseURL_video + "DesiChatVideos/" + name + ".mp4";
+
+        Log.d("sdafsda", "videoPath: "+videoPath);
+
         Uri videoUri = Uri.parse(videoPath);
         videoView.setVideoURI(videoUri);
         videoView.setBackgroundColor(getResources().getColor(R.color.color_333333));

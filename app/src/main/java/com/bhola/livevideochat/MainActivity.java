@@ -29,6 +29,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
@@ -66,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         }
         checkForupdate();
         getUserLocation_Permission();
+        startIncomingCallService();
 
 
         if (MyApplication.Ads_State.equals("active")) {
@@ -86,6 +89,57 @@ public class MainActivity extends AppCompatActivity {
         });
 
         initializeBottonFragments();
+
+    }
+
+    private void startIncomingCallService() {
+        if (MyApplication.App_updating.equals("active")) {
+            return;
+        }
+//        Intent intent = new Intent(MainActivity.this, IncomingCallService.class);
+//        startService(intent);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showFragment();
+            }
+        }, 20000);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showFragment();
+            }
+        }, 90000);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showFragment();
+            }
+        }, 210000);
+
+    }
+
+    private void showFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        if (!fragmentManager.isDestroyed()) {
+            try {
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment_Calling fragment = new Fragment_Calling();
+
+                String name = Utils.getSingleRandomGirlVideo(MainActivity.this);
+                Bundle args = new Bundle();
+                args.putString("name", name);
+                fragment.setArguments(args);
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.commit();
+            } catch (Exception e) {
+
+            }
+        }
 
 
     }

@@ -10,6 +10,7 @@
     <!-- Add alert window -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.REORDER_TASKS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -143,7 +144,10 @@
         </service>
         <service android:name=".BotMessageService" />
         <receiver android:name=".NotificationReceiver" />
-
+        <service
+            android:name=".IncomingCallService"
+            android:enabled="true"
+            android:exported="false" />
         <service
             android:name=".TimerService"
             android:enabled="true"

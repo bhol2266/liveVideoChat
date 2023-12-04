@@ -166,7 +166,7 @@ public class LoginScreen extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            if (progressDialog != null) {
+                            if (progressDialog != null && progressDialog.isShowing()) {
                                 //Crashlytics error
                                 progressDialog.cancel();
                             }

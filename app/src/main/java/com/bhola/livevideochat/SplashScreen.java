@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -77,11 +76,6 @@ public class SplashScreen extends AppCompatActivity {
             public void onAnimationEnd(Animator animation) {
                 animationCompleted = true;
 
-                if (!activityChanged) {
-                    handler_forIntent();
-
-                }
-
 
             }
 
@@ -106,24 +100,8 @@ public class SplashScreen extends AppCompatActivity {
 
 
     private void allUrl() {
-        if (!Utils.isInternetAvailable(SplashScreen.this)) {
+        if (Utils.isInternetAvailable(SplashScreen.this)) {
 
-            Handler handler2 = new Handler();
-            handler2.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (MyApplication.Login_Times > 5) {
-                        MyApplication.App_updating = "inactive";
-                        MyApplication.Ads_State = "active";
-                        MyApplication.Ad_Network_Name = "admob";
-                    }
-                    if (!activityChanged) {
-                        handler_forIntent();
-                    }
-                }
-            }, 2000);
-
-        } else {
             url_mref = FirebaseDatabase.getInstance().getReference().child("Desi_Girls_Video_Chat");
             url_mref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -203,8 +181,30 @@ public class SplashScreen extends AppCompatActivity {
                     }
 
                     if (animationCompleted) {
-
                         handler_forIntent();
+                    } else {
+                        lottie_progressbar.addAnimatorListener(new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                handler_forIntent();
+
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animation) {
+
+                            }
+                        });
                     }
                 })
                 .addOnFailureListener(e -> {

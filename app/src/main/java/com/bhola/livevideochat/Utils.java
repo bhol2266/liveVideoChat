@@ -32,18 +32,26 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -304,6 +312,73 @@ public class Utils {
                 });
 
     }
+
+
+
+
+
+    public static String getSingleRandomGirlVideo(Context context) {
+
+        ArrayList<Girl> girlsList = new ArrayList<>();
+//         Read and parse the JSON file
+        try {
+            JSONObject jsonObject = new JSONObject(loadJSONFromAsset(context));
+            JSONArray girlsArray = jsonObject.getJSONArray("girls");
+
+            // Iterate through the girls array
+            for (int i = 0; i < girlsArray.length(); i++) {
+                JSONObject girlObject = girlsArray.getJSONObject(i);
+
+                // Create a Girl object and set its properties
+                Girl girl = new Girl();
+                girl.setName(girlObject.getString("name"));
+                girl.setAge(girlObject.getInt("age"));
+                girl.setVideoUrl(girlObject.getString("videoUrl"));
+                girl.setCensored(girlObject.getBoolean("censored"));
+                girl.setSeen(girlObject.getBoolean("seen"));
+                girl.setLiked(girlObject.getBoolean("liked"));
+
+                // Add the Girl object to the ArrayList
+                if (MyApplication.userLoggedIAs.equals("Google")) {
+                    girlsList.add(girl);
+                } else {
+                    if (girl.isCensored()) {
+                        girlsList.add(girl);
+                    }
+                }
+
+            }
+            Collections.shuffle(girlsList);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Random random = new Random();
+        int randomIndex = random.nextInt(girlsList.size());
+        Girl randomgirl = girlsList.get(randomIndex);
+        return randomgirl.getName();
+
+    }
+
+
+
+
+    public static String loadJSONFromAsset(Context context) {
+        String json = null;
+        try {
+            InputStream inputStream = context.getAssets().open("girls_video.json");
+            int size = inputStream.available();
+            byte[] buffer = new byte[size];
+            inputStream.read(buffer);
+            inputStream.close();
+            json = new String(buffer, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
+
 
 
 }
