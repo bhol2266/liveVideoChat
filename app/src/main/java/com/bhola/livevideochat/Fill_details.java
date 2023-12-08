@@ -160,7 +160,7 @@ public class Fill_details extends AppCompatActivity {
         editor.putString("Gender", selectedGender);
         editor.putString("Birthday", Birthday);
         editor.putInt("userId", userId);
-        editor.putInt("coins", 100);
+        editor.putInt("coins", 0);
         editor.apply();
 
         UserModel userModel = new UserModel(nickName.getText().toString(), email, photoUrl, loggedAs, selectedGender, Birthday, "", "English", "", "", false, 0, userId, new java.util.Date(), "", new ArrayList<GalleryModel>(), "", false);
